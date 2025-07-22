@@ -1,0 +1,151 @@
+<% content_for :title, "Search Books - BookStore" %>
+
+<div class="container">
+  <h1 class="mb-4">Search Books</h1>
+  
+  <div class="search-box">
+    <%= form_with url: search_path, method: :get, local: true, class: "d-flex flex-column" do |form| %>
+      <div class="row mb-3">
+        <div class="col-md-8">
+          <%= form.text_field :q, placeholder: "Search by title, description, or author...", 
+              value: @query, class: "form-control form-control-lg" %>
+        </div>
+        <div class="col-md-4">
+          <%= form.select :category, options_for_select([['All Categories', '']] + 
+              @categories.map { |cat| [cat, cat] }), 
+              { selected: @category_filter }, 
+              { class: "form-select form-select-lg" } %>
+        </div>
+      </div>
+      <div class="text-center">
+        <%= form.submit "Search Books", class: "btn btn-primary btn-lg me-2" %>
+        <%= link_to "Clear", search_path, class: "btn btn-outline-secondary btn-lg" %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @query.present? %>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3>
+        Search Results for "<%= @query %>"
+        <% if @category_filter.present? %>
+          in <%= @category_filter %>
+        <% end %>
+      </h3>
+      <small class="text-muted">
+        <%= pluralize(@books.total_count, 'result') %> found
+      </small>
+    </div>
+
+    <div class="row">
+      <% if @books.any? %>
+        <% @books.each do |book| %>
+          <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <div class="book-cover h-100 d-flex align-items-center justify-content-center" style="min-height: 200px;">
+                    <h6 class="text-center px-2"><%= truncate(book.title, length: 30) %></h6>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body d-flex flex-column h-100">
+                    <h5 class="card-title">
+                      <%= link_to book.title, book_path(book), class: "text-decoration-none" %>
+                    </h5>
+                    <p class="text-muted mb-2">
+                      by <%= link_to book.author.name, author_path(book.author), class: "text-decoration-none" %>
+                    </p>
+                    <p class="text-muted mb-2">
+                      <small>
+                        <%= link_to book.category.name, category_path(book.category), class: "text-decoration-none" %>
+                      </small>
+                    </p>
+                    <p class="card-text flex-grow-1">
+                      <%= truncate(book.description, length: 120) %>
+                    </p>
+                    <div class="mt-auto">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="h6 text-success mb-0">$<%= book.price %></span>
+                        <small class="text-muted"><%= book.pages %> pages</small>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                          <% if book.reviews.any? %>
+                            <span class="rating">
+                              <% avg_rating = book.reviews.average(:rating).round(1) %>
+                              <% avg_rating.floor.times do %><i class="fas fa-star"></i><% end %>
+                              <% if avg_rating % 1 != 0 %><i class="fas fa-star-half-alt"></i><% end %>
+                              <% (5 - avg_rating.ceil).times do %><i class="far fa-star"></i><% end %>
+                            </span>
+                            (<%= book.reviews.count %>)
+                          <% else %>
+                            No reviews
+                          <% end %>
+                        </small>
+                        <%= link_to "View Details", book_path(book), class: "btn btn-primary btn-sm" %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="col-12">
+          <div class="text-center py-5">
+            <i class="fas fa-search fa-4x text-muted mb-3"></i>
+            <h3>No books found</h3>
+            <p class="text-muted">
+              Try different keywords or <%= link_to "browse all books", books_path, class: "text-decoration-none" %>.
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Pagination -->
+    <% if @books.any? %>
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @books %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="text-center py-5">
+      <i class="fas fa-search fa-4x text-muted mb-3"></i>
+      <h3>Find Your Next Great Read</h3>
+      <p class="text-muted">Search our extensive collection by title, author, or description.</p>
+      
+      <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+          <div class="card h-100 text-center">
+            <div class="card-body">
+              <i class="fas fa-book fa-2x text-primary mb-3"></i>
+              <h5>Search by Title</h5>
+              <p class="text-muted">Find books by their exact title or partial matches</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card h-100 text-center">
+            <div class="card-body">
+              <i class="fas fa-user fa-2x text-success mb-3"></i>
+              <h5>Search by Author</h5>
+              <p class="text-muted">Discover books by your favorite authors</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card h-100 text-center">
+            <div class="card-body">
+              <i class="fas fa-tags fa-2x text-warning mb-3"></i>
+              <h5>Filter by Category</h5>
+              <p class="text-muted">Browse books within specific genres</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

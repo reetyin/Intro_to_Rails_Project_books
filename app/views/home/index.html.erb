@@ -1,0 +1,129 @@
+<% content_for :title, "BookStore - Discover Your Next Great Read" %>
+
+<div class="hero-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold">Welcome to BookStore</h1>
+        <p class="lead">Discover amazing books from our extensive collection of literature, spanning multiple genres and authors from around the world.</p>
+        <%= link_to "Browse Books", books_path, class: "btn btn-light btn-lg" %>
+        <%= link_to "Search Books", search_path, class: "btn btn-outline-light btn-lg ms-3" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Statistics Section -->
+  <div class="row mb-5">
+    <div class="col-md-3 mb-3">
+      <div class="card stats-card text-center p-3">
+        <h3 class="text-primary"><%= @total_books %></h3>
+        <p class="mb-0">Books Available</p>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card stats-card text-center p-3">
+        <h3 class="text-success"><%= @total_authors %></h3>
+        <p class="mb-0">Authors</p>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card stats-card text-center p-3">
+        <h3 class="text-warning"><%= @total_categories %></h3>
+        <p class="mb-0">Categories</p>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card stats-card text-center p-3">
+        <h3 class="text-info"><%= @total_reviews %></h3>
+        <p class="mb-0">Reviews</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Books Section -->
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Featured Books</h2>
+      <%= link_to "View All Books", books_path, class: "btn btn-outline-primary" %>
+    </div>
+    
+    <div class="row">
+      <% @featured_books.each do |book| %>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card book-card h-100">
+            <div class="book-cover">
+              <h5><%= book.title %></h5>
+            </div>
+            <div class="card-body">
+              <h6 class="card-title"><%= link_to book.title, book_path(book), class: "text-decoration-none" %></h6>
+              <p class="text-muted mb-1">by <%= book.author.name %></p>
+              <p class="text-muted mb-2"><small><%= book.category.name %></small></p>
+              <p class="card-text"><%= truncate(book.description, length: 100) %></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="h5 text-success mb-0">$<%= book.price %></span>
+                <%= link_to "View Details", book_path(book), class: "btn btn-primary btn-sm" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Browse by Categories</h2>
+      <%= link_to "View All Categories", categories_path, class: "btn btn-outline-primary" %>
+    </div>
+    
+    <div class="row">
+      <% @categories.each do |category| %>
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+          <div class="card category-card h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title"><%= category.name %></h5>
+              <p class="text-muted"><%= pluralize(category.books.count, 'book') %></p>
+              <%= link_to "Browse", category_path(category), class: "btn btn-outline-primary btn-sm" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Recent Reviews Section -->
+  <% if @recent_reviews.any? %>
+    <section class="mb-5">
+      <h2 class="mb-4">Recent Reviews</h2>
+      
+      <div class="row">
+        <% @recent_reviews.each do |review| %>
+          <div class="col-lg-4 mb-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="card-title mb-0">
+                    <%= link_to review.book.title, book_path(review.book), class: "text-decoration-none" %>
+                  </h6>
+                  <div class="rating">
+                    <% review.rating.times do %>
+                      <i class="fas fa-star"></i>
+                    <% end %>
+                    <% (5 - review.rating).times do %>
+                      <i class="far fa-star"></i>
+                    <% end %>
+                  </div>
+                </div>
+                <p class="text-muted small">by <%= review.reviewer_name %></p>
+                <p class="card-text"><%= truncate(review.content, length: 120) %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>

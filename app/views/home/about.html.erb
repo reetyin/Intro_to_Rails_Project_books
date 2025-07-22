@@ -1,0 +1,125 @@
+<% content_for :title, "About BookStore" %>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="text-center mb-5">
+        <h1 class="display-4">About BookStore</h1>
+        <p class="lead">Your comprehensive digital library for book discovery and exploration</p>
+      </div>
+
+      <div class="card mb-5">
+        <div class="card-body">
+          <h2 class="h4 mb-4">Project Overview</h2>
+          <p>BookStore is a Ruby on Rails application designed to showcase a comprehensive book management system. This project demonstrates the implementation of multiple data sources, advanced database relationships, and modern web development practices.</p>
+          
+          <h3 class="h5 mt-4 mb-3">Data Sources Used</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex align-items-center">
+              <i class="fas fa-database text-primary me-3"></i>
+              <div>
+                <strong>Manual/Hardcoded Data:</strong> Categories with detailed descriptions
+              </div>
+            </li>
+            <li class="list-group-item d-flex align-items-center">
+              <i class="fas fa-magic text-success me-3"></i>
+              <div>
+                <strong>Faker Gem:</strong> Generated authors, additional books, and user reviews
+              </div>
+            </li>
+            <li class="list-group-item d-flex align-items-center">
+              <i class="fas fa-cloud text-info me-3"></i>
+              <div>
+                <strong>Open Library API:</strong> Real book data from various subjects including fiction, science, history, philosophy, and biography
+              </div>
+            </li>
+            <li class="list-group-item d-flex align-items-center">
+              <i class="fas fa-file-csv text-warning me-3"></i>
+              <div>
+                <strong>Generated CSV Data:</strong> Structured book information with detailed metadata
+              </div>
+            </li>
+          </ul>
+
+          <h3 class="h5 mt-4 mb-3">Database Schema</h3>
+          <p>The application uses a well-structured database design with the following models:</p>
+          <ul>
+            <li><strong>Categories:</strong> Book classifications with descriptions</li>
+            <li><strong>Authors:</strong> Author information including biography and nationality</li>
+            <li><strong>Books:</strong> Complete book details with ISBN, pricing, and metadata</li>
+            <li><strong>Reviews:</strong> User reviews with ratings and detailed feedback</li>
+          </ul>
+
+          <h3 class="h5 mt-4 mb-3">Key Features</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <ul>
+                <li>📚 Comprehensive book catalog</li>
+                <li>🔍 Advanced search functionality</li>
+                <li>📂 Category-based browsing</li>
+                <li>👨‍💼 Author profiles and books</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul>
+                <li>⭐ Book reviews and ratings</li>
+                <li>📱 Responsive design</li>
+                <li>🎨 Modern Bootstrap UI</li>
+                <li>🔗 Hierarchical navigation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row text-center">
+        <div class="col-md-3 mb-4">
+          <div class="card stats-card h-100">
+            <div class="card-body">
+              <i class="fas fa-book fa-2x text-primary mb-3"></i>
+              <h3><%= @total_books %></h3>
+              <p class="mb-0">Total Books</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card stats-card h-100">
+            <div class="card-body">
+              <i class="fas fa-user fa-2x text-success mb-3"></i>
+              <h3><%= @total_authors %></h3>
+              <p class="mb-0">Authors</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card stats-card h-100">
+            <div class="card-body">
+              <i class="fas fa-tags fa-2x text-warning mb-3"></i>
+              <h3><%= @total_categories %></h3>
+              <p class="mb-0">Categories</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card stats-card h-100">
+            <div class="card-body">
+              <i class="fas fa-star fa-2x text-info mb-3"></i>
+              <h3><%= @total_reviews %></h3>
+              <p class="mb-0">Reviews</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <h3>Explore Our Collection</h3>
+        <p class="mb-4">Start discovering your next favorite book today!</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <%= link_to "Browse Books", books_path, class: "btn btn-primary" %>
+          <%= link_to "View Categories", categories_path, class: "btn btn-outline-primary" %>
+          <%= link_to "Search Books", search_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

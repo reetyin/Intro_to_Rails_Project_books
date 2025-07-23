@@ -29,15 +29,16 @@ class BooksController < ApplicationController
     @category_filter = params[:category]
 
     if @query.present?
-      @books = Book.includes(:author, :category)
-                   .where("title ILIKE ? OR description ILIKE ?", "%#{@query}%", "%#{@query}%")
-                   .or(Book.joins(:author).where("authors.name ILIKE ?", "%#{@query}%"))
+      # SQLite使用LIKE替代ILIKE，并用LOWER()实现不区分大小写搜索
+      @books = Book.joins(:author, :category)
+                   .where("LOWER(books.title) LIKE ? OR LOWER(books.description) LIKE ? OR LOWER(authors.name) LIKE ?", 
+                          "%#{@query.downcase}%", "%#{@query.downcase}%", "%#{@query.downcase}%")
 
       if @category_filter.present?
-        @books = @books.joins(:category).where("categories.name = ?", @category_filter)
+        @books = @books.where("categories.name = ?", @category_filter)
       end
 
-      @books = @books.page(params[:page]).per(10)
+      @books = @books.includes(:author, :category).page(params[:page]).per(10)
     else
       @books = Book.none.page(params[:page])
     end

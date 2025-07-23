@@ -31,7 +31,7 @@ class BooksController < ApplicationController
     if @query.present?
       # SQLite使用LIKE替代ILIKE，并用LOWER()实现不区分大小写搜索
       @books = Book.joins(:author, :category)
-                   .where("LOWER(books.title) LIKE ? OR LOWER(books.description) LIKE ? OR LOWER(authors.name) LIKE ?", 
+                   .where("LOWER(books.title) LIKE ? OR LOWER(books.description) LIKE ? OR LOWER(authors.name) LIKE ?",
                           "%#{@query.downcase}%", "%#{@query.downcase}%", "%#{@query.downcase}%")
 
       if @category_filter.present?

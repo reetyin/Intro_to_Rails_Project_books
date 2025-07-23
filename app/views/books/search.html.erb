@@ -73,7 +73,7 @@
                         <small class="text-muted">
                           <% if book.reviews.any? %>
                             <span class="rating">
-                              <% avg_rating = book.reviews.average(:rating).round(1) %>
+                              <% avg_rating = (book.reviews.average(:rating) || 0).round(1) %>
                               <% avg_rating.floor.times do %><i class="fas fa-star"></i><% end %>
                               <% if avg_rating % 1 != 0 %><i class="fas fa-star-half-alt"></i><% end %>
                               <% (5 - avg_rating.ceil).times do %><i class="far fa-star"></i><% end %>
